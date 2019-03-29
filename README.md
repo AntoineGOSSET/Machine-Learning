@@ -11,4 +11,5 @@ regression_logisitic.py
 
 ## Jour 4:
 a_derivation_to_e.py
+
 taylor_sequence.py
