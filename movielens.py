@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Charge movielens-100k dataset
 data = Dataset.load_builtin('ml-100k')
 
-# Créer un jeu de test et de train ( 25%, 75%)
+# Créer un jeu de test et de train ( 15%, 85%)
 trainset, testset = train_test_split(data, test_size=.15)
 
 algo = KNNWithMeans()
@@ -28,7 +28,7 @@ for prediction in predictions:
     # Calcul le delta entre la prediction et la réalité
     result.append(prediction.r_ui - prediction.est)
 
-# Affiche l'histogramme du delta entre les prediction et la réalité
+# Affiche l'histogramme du delta entre les predictions et la réalité
 plt.hist(result, 100)
 
 plt.show()
