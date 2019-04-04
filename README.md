@@ -13,3 +13,6 @@ regression_logisitic.py
 a_derivation_to_e.py
 
 taylor_sequence.py
+
+## Jour 5:
+movielens.py
