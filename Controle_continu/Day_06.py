@@ -14,11 +14,11 @@ y=[[81682.0], [81720.0], [81760.0], [81826.0], [81844.0], [81864.0], [81881.0], 
 linearRegressor = LinearRegression()
 reg= linearRegressor.fit(x, y)
 
-print("Prédiction pour le 2019-04-04 : %s" % (linearRegressor.predict([[date_to_float(2019, 4, 4)]])[0][0]))
+print("Prédiction pour le 2019-04-0 : %s" % (linearRegressor.predict([[date_to_float(2019, 4, 5)]])[0][0]))
 
 plt.subplot(211)
 plt.scatter(x, y, color = 'red')
-plt.scatter([date_to_float(2019, 4, 4)], linearRegressor.predict([[date_to_float(2019, 4, 4)]]), color = 'green')
+plt.scatter([date_to_float(2019, 4, 5)], linearRegressor.predict([[date_to_float(2019, 4, 5)]]), color = 'green')
 plt.plot(x, linearRegressor.predict(x), color = 'blue')
 plt.title("Courbe de regression linéaire")
 
