@@ -5,14 +5,13 @@ A = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0,
 
 B = [[1, 15], [2, 14], [2, 15], [3, 13], [3, 14], [3, 15], [4, 12], [4, 13], [4, 14], [4, 15], [5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [6, 10], [6, 11], [6, 12], [6, 13], [6, 14], [6, 15], [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [8, 8], [8, 9], [8, 10], [8, 11], [8, 12], [8, 13], [8, 14], [8, 15], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 14], [9, 15], [10, 6], [10, 7], [10, 8], [10, 9], [10, 10], [10, 11], [10, 12], [10, 13], [10, 14], [10, 15], [11, 5], [11, 6], [11, 7], [11, 8], [11, 9], [11, 10], [11, 11], [11, 12], [11, 13], [11, 14], [11, 15], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 13], [12, 14], [12, 15], [13, 3], [13, 4], [13, 5], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12], [13, 13], [13, 14], [13, 15], [14, 2], [14, 3], [14, 4], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 11], [14, 12], [14, 13], [14, 14], [14, 15], [15, 1], [15, 2], [15, 3], [15, 4], [15, 5], [15, 6], [15, 7], [15, 8], [15, 9], [15, 10], [15, 11], [15, 12], [15, 13], [15, 14], [15, 15]]
 
-# Affiche les points des listes A et B 
-plt.plot()
+# Ajoute les points des listes A et B dans pyplot
 x_a,y_a = [elem[0] for elem in A],[elem[1] for elem in A]
 plt.scatter(x_a, y_a, color='blue')
 x_b,y_b = [elem[0] for elem in B],[elem[1] for elem in B]
 plt.scatter(x_b, y_b, color='red')
 
-# Concaténation des liste A et B
+# Concaténation des listes A et B
 data = A + B
 
 # Génère une liste de boolean de la même longeur que la liste data, avec 0 lorsque la valeur dans data est A et 1 lorsqu'elle est B
@@ -23,7 +22,7 @@ classifier = LogisticRegression(solver='lbfgs').fit(data, target)
 
 # Prédiction sur un point qui n'ai pas dans la liste
 result = classifier.predict([[12,2]])
-# Affichage de ce point
+# Ajoute ce point dans pyplot
 plt.scatter(12,2,color='green')
 
 # Affiche la valeur de la prédiction
@@ -31,5 +30,5 @@ if result == 0 :
     print("La prédiction est A")
 else:
     print("La prédiction est B")
-
+# Affiche les points pyplot
 plt.show()
