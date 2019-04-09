@@ -16,3 +16,6 @@ taylor_sequence.py
 
 ## Jour 5:
 movielens.py
+
+## Jour 7:
+forest.py
