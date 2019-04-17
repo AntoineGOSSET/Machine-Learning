@@ -1,5 +1,7 @@
 # Machine-Learning
 
+Ce projet comprend les différents exercices réalisés dans le cadre d'une formation de ML.
+
 ## Jour 1 :
 stats.py
 
@@ -16,3 +18,6 @@ taylor_sequence.py
 
 ## Jour 5:
 movielens.py
+
+## Jour 7:
+forest.py

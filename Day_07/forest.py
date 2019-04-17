@@ -6,25 +6,64 @@ from sklearn.ensemble import RandomForestClassifier
 import itertools
 import operator
 
-#Awfull Hack to mute warning about 
-# convergence issues
+"""Ce programme permet de comparer la précision entre les classifieur OvO OvR et Forest"""
+# =============================================================================
+# MAIN
+# =============================================================================
+
+def main():
+    digits = datasets.load_digits()
+    data = digits['data']
+    target = digits['target']
+    classes = set(target)
+    # Créer un jeu de données test et train
+    x_train, x_test, y_train, y_test = train_test_split(data, target, test_size=0.2)
+    # Créer une liste contenant des tuples (images,value)
+    test_values = [(x_test[index], value) for index, value in enumerate(y_test)]
+
+    # Créer des classifieur O vs O
+    o_vs_o_classifiers = generateOvOClassifier(classes, x_train, y_train)
+    # Fait les prédictions avec les classifieurs O vs O
+    predictOVO(test_values, o_vs_o_classifiers)
+
+    # Créer des classifieur O vs O
+    ovrclassifier = generateOvRClassifier(classes, x_train, y_train)
+    # Fait les prédictions avec les classifieurs O vs R
+    predictOVR(test_values, ovrclassifier)
+
+    # Créer des forest classifieur
+    forestclassifier = generateForestClassifier(classes, 10, x_train, y_train)
+    # Fait les prédictions avec les forests classifieurs
+    predictForest(test_values, forestclassifier)
+
+# =============================================================================
+# FUNCTIONS
+# =============================================================================
+
+
 def warn(*args, **kwargs):
     pass
 import warnings
 warnings.warn = warn
 
-
-def generateOvRClassifier(classes):
+# Génére des classifeurs pour chaque valeur de notre classe (dans notre cas pour chaque chiffre)
+def generateOvRClassifier(classes, x_train, y_train):
     o_vs_r_classifiers = {}
+    # Pour chaque chiffre on crée un classifieur O v R
     for elem in classes:
+        # On crée une liste contenant toutes les valeurs égale à la valeur que l'on cherche dans ce classifieur
         class_valid = [x_train[index] for index, value in enumerate(y_train) if value == elem]
+        # On crée une liste contenant toutes les valeurs différente de la valeur que l'on cherche dans ce classifieur
         class_invalid = [x_train[index] for index, value in enumerate(y_train) if value != elem]
+        # On crée un liste avec pour chaque valeur 1 si elle correspond à celle du classifieur, 0 dans le cas contraire
         value = [1] * len(class_valid) + [0] * len(class_invalid)
+        # On concatène nos deux liste pour récuperer l'intégralité de nos valeurs
         learn = class_valid + class_invalid
+        # On créer un classifieur O v R à partir d'une regression logistique
         o_vs_r_classifiers["%d_rest" % elem] = LogisticRegression(multi_class='ovr',solver='lbfgs').fit(learn, value)
     return o_vs_r_classifiers
 
-
+# A partir de valeur de test et d'un cassifieur O v R retourne la précision du classifieur
 def predictOVR(test_values, o_vs_r_classifiers):
     results = {}
     i=0
@@ -46,16 +85,23 @@ def predictOVR(test_values, o_vs_r_classifiers):
     prct = (correct/len(results)*100)
     print(f"The One versus Rest score a {prct} % precision score ")
 
-def generateOvOClassifier(classes):
+def generateOvOClassifier(classes, x_train, y_train):
     o_vs_o_classifiers = {}
+    # Pour chaque chiffre on crée une combinaison avec chaque autre chiffre pour crée un classifeur O v O
     for elem in itertools.combinations(classes,2):
+        # On crée une liste contenant toutes les valeurs égales au premier chiffre de notre combinaison
         class0 = [x_train[index] for index, value in enumerate(y_train) if value == elem[0]]
+        # On crée une liste contenant toutes les valeurs égales au second chiffre de notre combinaison
         class1 = [x_train[index] for index, value in enumerate(y_train) if value == elem[1]]
+        # On crée un liste avec pour chaque valeur 0 si elle correspond à celle du premier chiffre, 1 si elle correspond au second chiffre
         value = [0] * len(class0) + [1] * len(class1)
+        # On concatène nos deux liste pour récuperer l'intégralité des nos valeurs étant égale à l'un des deux chiffre de notre combinaison
         learn = class0 + class1
+        # On créer un classifieur O v O à partir d'une regression logistique
         o_vs_o_classifiers['%d_%d'%elem] = LogisticRegression(solver='lbfgs').fit(learn, value)
     return o_vs_o_classifiers
 
+# A partir de valeur de test et d'un cassifieur O v O retourne la précision du classifieur
 def predictOVO(test_values, o_vs_o_classifiers):
     """
     TO DO : STATS
@@ -83,16 +129,23 @@ def predictOVO(test_values, o_vs_o_classifiers):
     prct = (correct/len(results)*100)
     print(f"The One versus One score a {prct} % precision score ")
 
-def generateForestClassifier(classes, precision):
+def generateForestClassifier(classes, precision, x_train, y_train):
     forest_classifiers = {}
+    # Pour chaque chiffre on crée un forest classifieur
     for elem in classes:
+        # On crée une liste contenant toutes les valeurs égale à la valeur que l'on cherche dans ce classifieur
         class_valid = [x_train[index] for index, value in enumerate(y_train) if value == elem]
+        # On crée une liste contenant toutes les valeurs différente de la valeur que l'on cherche dans ce classifieur
         class_invalid = [x_train[index] for index, value in enumerate(y_train) if value != elem]
+        # On crée un liste avec pour chaque valeur 1 si elle correspond à celle du classifieur, 0 dans le cas contraire
         value = [1] * len(class_valid) + [0] * len(class_invalid)
+        # On concatène nos deux liste pour récuperer l'intégralité de nos valeurs
         learn = class_valid + class_invalid
+        # On créer un forest classifieur à partir d'une regression logistique
         forest_classifiers["%d_rest" % elem] = RandomForestClassifier(n_estimators=precision).fit(learn, value)
     return forest_classifiers
 
+# A partir de valeur de test et d'un forest cassifieur retourne la précision du classifieur
 def predictForest(test_values, forest_classifiers):
     results = {}
     i=0
@@ -115,21 +168,9 @@ def predictForest(test_values, forest_classifiers):
     print(f"The Forest score a {prct} % precision score ")
 
 
+# =============================================================================
+# SCRIPT INITIATE
+# =============================================================================
 
-if __name__ == "__main__":
-    digits = datasets.load_digits()
-    data = digits['data']
-    target  = digits['target']
-    classes = set(target)
-    #Splitting the data to get train and test sets
-    x_train, x_test, y_train, y_test = train_test_split(data, target, test_size=0.2)
-    #Create the O v O classifiers
-    o_vs_o_classifiers = generateOvOClassifier(classes)
-    # We generate an array containing tuples (images,value)
-    test_values = [(x_test[index],value) for index, value in enumerate(y_test)]
-    # Launch the loop to predict elem in test values 
-    predictOVO(test_values, o_vs_o_classifiers)
-    ovrclassifier = generateOvRClassifier(classes)
-    predictOVR(test_values,ovrclassifier)
-    forestclassifier = generateForestClassifier(classes, 10)
-    predictForest(test_values, forestclassifier)
+if __name__ == '__main__':
+    main()
