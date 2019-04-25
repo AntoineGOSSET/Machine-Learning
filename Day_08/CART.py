@@ -8,6 +8,7 @@ import time
 from sklearn.datasets import fetch_covtype
 
 """Ce programme permet de comparer la précision entre les classifieur OvO OvR et Forest"""
+
 # =============================================================================
 # MAIN
 # =============================================================================

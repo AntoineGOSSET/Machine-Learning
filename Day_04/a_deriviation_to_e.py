@@ -14,7 +14,7 @@ def main():
         print(a)
         a += 0.0001
     # Lorsque le log de a est supérieur à 1 on affiche la valeur de a
-    print("A = %s" % (a))
+    print("Estimation de e : %s" % (a))
 
 
 # =============================================================================
